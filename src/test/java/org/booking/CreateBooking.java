@@ -1,16 +1,14 @@
 package org.booking;
 
-import groovyjarjarantlr4.v4.runtime.misc.NotNull;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.junit.Test;
 import static org.hamcrest.Matchers.*;
-import static io.restassured.RestAssured.basePath;
 import static io.restassured.RestAssured.given;
 
 public class CreateBooking {
     @Test
-    public void createBookingTest () {
+    public void createBookingTest() {
         RestAssured.baseURI = "https://booking-api-dev.herokuapp.com";
         RestAssured.port = 443;
 

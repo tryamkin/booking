@@ -3,6 +3,7 @@ package org.booking;
 import io.restassured.http.ContentType;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
 
@@ -65,7 +66,6 @@ public class PartialUpdateBooking {
                 .extract()
                 .path("token");
     }
-
 
 
 }
