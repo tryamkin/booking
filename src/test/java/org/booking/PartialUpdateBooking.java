@@ -20,7 +20,6 @@ public class PartialUpdateBooking {
     @Test
     public void updateBookingWithPartialPayload() {
         String bookingId = "1"; // Replace with the actual booking ID
-
         given()
                 .baseUri(BASE_URL)
                 .basePath("/booking/{id}")
