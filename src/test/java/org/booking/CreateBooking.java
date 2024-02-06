@@ -2,11 +2,16 @@ package org.booking;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import io.restassured.path.json.JsonPath;
 import org.junit.Test;
+
+import static io.restassured.RestAssured.options;
 import static org.hamcrest.Matchers.*;
 import static io.restassured.RestAssured.given;
 
 public class CreateBooking {
+
+    private static String bookingid;
     @Test
     public void createBookingTest() {
         RestAssured.baseURI = "https://booking-api-dev.herokuapp.com";
@@ -41,6 +46,8 @@ public class CreateBooking {
                         .body("booking.bookingdates.checkout", equalTo("2019-01-01"))
                         .body("booking.additionalneeds", equalTo("Breakfast"))
                         .extract().asString();
+
         System.out.println("Response:  " + response);
+
     }
 }

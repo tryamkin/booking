@@ -1,0 +1,163 @@
+Завдання:
+Завдання 1
+Використовуючи бібліотеку REST Assured, напишіть код для виконання POST-запиту до ендпоінту https://booking-api-dev.herokuapp.com/auth, передаючи JSON-параметри для автентифікації (username: "admin", password: "password123").
+Додаткові вимоги:
+Вкажіть заголовок Content-Type зі значенням application/json.
+Очікується успішна відповідь (HTTP/1.1 200 OK).
+Отримайте токен із відповіді та збережіть його для використання в наступних запитах.
+
+Завдання 2
+Використовуючи отриманий токен (з попереднього завдання), напишіть код для виконання PUT та DELETE запитів до ендпоінту https://booking-api-dev.herokuapp.com/booking.
+Додаткові вимоги:
+Виберіть довільний ідентифікатор броні (bookingId).
+Для запиту PUT передайте оновлені дані броні у форматі JSON.
+
+Завдання 3
+Використовуючи бібліотеку REST Assured, напишіть код для виконання GET-запиту до ендпоінту https://booking-api-dev.herokuapp.com/booking із можливістю використання опціональних параметрів запиту для фільтрації результатів.
+Дополнительные требования: .
+Реалізуйте три варіанти GET-запитів:
+Простий GET-запит для отримання всіх ідентифікаторів броней.
+GET-запит з фільтрацією на ім'я (firstname).
+GET-запит з фільтрацією за датою заїзду (checkin) та датою виїзду (checkout).
+
+Завдання 4
+Використовуючи бібліотеку REST Assured, напишіть код для виконання POST-запиту до ендпоінту https://booking-api-dev.herokuapp.com/booking, створюючи нову броню із заданими параметрами.
+Додаткові вимоги:
+Реалізуйте три варіанти POST-запитів за допомогою різних форматів payload (JSON, XML, URLencoded). Очікується успішна відповідь (HTTP/1.1 200 OK).
+ON, XML, URLencoded). Ожидается успешный ответ (HTTP/1.1 200 OK).
+Отримайте ідентифікатор броні з відповіді для подальшого використання.
+
+Завдання 5
+Використовуючи бібліотеку REST Assured, напишіть код для виконання запиту PUT до ендпоінту https://booking-api-dev.herokuapp.com/booking/:id для оновлення існуючої броні із заданими параметрами.
+Додаткові вимоги:
+Реалізуйте три варіанти PUT-запитів, використовуючи різні формати payload (JSON, XML, URLencoded).
+Додайте заголовки Content-Type, Accept і Cookie (для передачі токена авторизації) у запит.
+Очікується успішна відповідь (HTTP/1.1 200 OK) з оновленими даними броні.
+
+Додатковий код
+If-Else | Create booking
+import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
+import org.junit.jupiter.api.Test;
+
+import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.*;
+
+public class CreateBooking {
+    @Test
+    public void createBookingTest() {
+        // Set base URI and port
+        RestAssured.baseURI = "https://booking-api-dev.herokuapp.com";
+        RestAssured.port = 443; // Assuming the API uses HTTPS
+
+        // Request body JSON
+        String requestBody = "{\n" +
+                " \"firstname\" : \"Jim\",\n" +
+                " \"lastname\" : \"Brown\",\n" +
+                " \"totalprice\" : 111,\n" +
+                " \"depositpaid\" : true,\n" +
+                " \"bookingdates\" : {\n" +
+                " \"checkin\" : \"2018-01-01\",\n" +
+                " \"checkout\" : \"2019-01-01\"\n" +
+                " },\n" +
+                " \"additionalneeds\" : \"Breakfast\"\n" +
+                "}";
+
+        // Send POST request
+        String response =
+                given()
+                        .header("Content-Type", ContentType.JSON)
+                        .body(requestBody)
+                        .when()
+                        .post("/booking")
+                        .then()
+                        .statusCode(200)
+                        .body("bookingid", notNullValue())
+                        .body("booking.firstname", equalTo("Jim"))
+                        .body("booking.lastname", equalTo("Brown"))
+                        .body("booking.totalprice", equalTo(111))
+                        .body("booking.depositpaid", equalTo(true))
+                        .body("booking.bookingdates.checkin", equalTo("2018-01-01"))
+                        .body("booking.bookingdates.checkout", equalTo("2019-01-01"))
+                        .body("booking.additionalneeds", equalTo("Breakfast"))
+                        .extract().asString();
+
+        System.out.println("Response: " + response);
+
+        // Additional assertions with detailed error messages
+        if (!response.contains("bookingid")) {
+            System.out.println("Assertion failed: 'bookingid' not found in response.");
+        }
+
+        if (!response.contains("Jjim")) {
+            System.out.println("Assertion failed: 'Jim' not found in response.");
+        }
+
+        if (!response.contains("Brown")) {
+            System.out.println("Assertion failed: 'Brown' not found in response.");
+        }
+
+        if (!response.contains("201j8-01-01")) {
+            System.out.println("Assertion failed: '2018-01-01' not found in response.");
+        }
+    }
+}
+Try-Catch | Create booking
+import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
+import org.junit.jupiter.api.Test;
+
+import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.*;
+
+public class CreateAssert {
+    @Test
+    public void createBookingTest() {
+        // Set base URI and port
+        RestAssured.baseURI = "https://booking-api-dev.herokuapp.com";
+        RestAssured.port = 443; // Assuming the API uses HTTPS
+
+        // Request body JSON
+        String requestBody = "{\n" +
+                " \"firstname\" : \"Jim\",\n" +
+                " \"lastname\" : \"Brown\",\n" +
+                " \"totalprice\" : 111,\n" +
+                " \"depositpaid\" : true,\n" +
+                " \"bookingdates\" : {\n" +
+                " \"checkin\" : \"2018-01-01\",\n" +
+                " \"checkout\" : \"2019-01-01\"\n" +
+                " },\n" +
+                " \"additionalneeds\" : \"Breakfast\"\n" +
+                "}";
+
+        // Send POST request
+        String response = null;
+        try {
+            response = given()
+                    .header("Content-Type", ContentType.JSON)
+                    .body(requestBody)
+                    .when()
+                    .post("/booking")
+                    .then()
+                    .statusCode(200)
+                    .body("bookingid", notNullValue(), "Assertion failed: 'bookingid' not found in response.")
+                    .body("booking.firstname", equalTo("Jim"), "Assertion failed: 'Jim' not found in response.")
+                    .body("booking.lastname", equalTo("Brown"), "Assertion failed: 'Brown' not found in response.")
+                    .body("booking.totalprice", equalTo(111), "Assertion failed: '111' not found in response.")
+                    .body("booking.depositpaid", equalTo(true), "Assertion failed: 'true' not found in response.")
+                    .body("booking.bookingdates.checkin", equalTo("2018-01-01"), "Assertion failed: '2018-01-01' not found in response.")
+                    .body("booking.bookingdates.checkout", equalTo("2019-01-01"), "Assertion failed: '2019-01-01' not found in response.")
+                    .body("booking.additionalneeds", equalTo("Breakfast"), "Assertion failed: 'Breakfast' not found in response.")
+                    .extract().asString();
+
+            System.out.println("All assertions passed.");
+        } catch (AssertionError e) {
+            System.out.println("Assertion failed: " + e.getMessage());
+
+        } finally {
+            if (response != null) {
+                System.out.println("Response: " + response);
+            }
+        }
+    }
+}
