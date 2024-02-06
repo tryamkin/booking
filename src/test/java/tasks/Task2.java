@@ -39,7 +39,7 @@ public class Task2 {
 
         given()
                 .baseUri(BASE_URL)
-                .basePath("/booking/11")
+                .basePath("/booking/1")
                 .header("Content-Type", ContentType.JSON.toString())
                 .header("Accept", ContentType.JSON.toString())
                 .header("Cookie", "token=" + TOKEN)
